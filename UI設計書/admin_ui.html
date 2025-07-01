@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RepoTomo - 管理者ダッシュボード</title>
+    <title>報告書管理ダッシュボード - 管理者用</title>
     <style>
         * {
             margin: 0;
@@ -12,562 +12,577 @@
         }
         
         body {
-            font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, Osaka, 'MS PGothic', arial, helvetica, sans-serif;
-            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, sans-serif;
+            background: #f5f7fa;
             color: #333;
             line-height: 1.6;
         }
         
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .dashboard-header {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .header-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .logo {
+        .header-title {
             font-size: 24px;
-            font-weight: bold;
+            font-weight: 600;
+            color: #2c3e50;
         }
         
-        .user-menu {
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        /* 優先対応エリア */
+        .priority-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .priority-icon {
+            font-size: 24px;
+        }
+        
+        .priority-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        .priority-count {
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .priority-items {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .priority-item {
+            background: white;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .priority-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .priority-info {
+            flex: 1;
+        }
+        
+        .priority-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .priority-message {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .priority-meta {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+        
+        .priority-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-reply {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-reply:hover {
+            background: #2980b9;
+        }
+        
+        .btn-check {
+            background: #f5f7fa;
+            color: #7f8c8d;
+        }
+        
+        /* 全体概要 */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .overview-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .overview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .overview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .overview-stat {
+            font-size: 32px;
+            font-weight: 700;
+            color: #27ae60;
+            margin-bottom: 5px;
+        }
+        
+        .overview-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        /* 報告書別サマリー */
+        .reports-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-tab {
+            padding: 6px 16px;
+            background: #f5f7fa;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .report-summary {
+            border-bottom: 1px solid #ecf0f1;
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .report-summary:last-child {
+            border-bottom: none;
+        }
+        
+        .report-info {
+            flex: 1;
+        }
+        
+        .report-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .report-progress {
             display: flex;
             align-items: center;
             gap: 15px;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 1px solid #e0e0e0;
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        .card-icon {
-            font-size: 24px;
-            padding: 8px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .nav-tabs {
-            display: flex;
-            border-bottom: 2px solid #e0e0e0;
-            margin-bottom: 2rem;
-        }
-        
-        .nav-tab {
-            padding: 12px 24px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .nav-tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-        }
-        
-        .nav-tab:hover {
-            background: #f8f9fa;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .table-container {
-            background: white;
-            border-radius: 12px;
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 300px;
         }
         
-        .table {
-            width: 100%;
-            border-collapse: collapse;
+        .progress-fill {
+            height: 100%;
+            background: #27ae60;
+            border-radius: 4px;
+            transition: width 0.3s ease;
         }
         
-        .table th {
-            background: #f8f9fa;
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 1px solid #e0e0e0;
+        .progress-text {
+            font-size: 14px;
+            color: #7f8c8d;
+            min-width: 100px;
         }
         
-        .table td {
-            padding: 16px;
-            border-bottom: 1px solid #f0f0f0;
+        .report-alerts {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .table tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .status-badge {
+        .alert-badge {
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 500;
         }
         
-        .status-working {
-            background: #e8f5e8;
-            color: #2e7d2e;
+        .alert-questions {
+            background: #e3f2fd;
+            color: #1976d2;
         }
         
-        .status-break {
-            background: #fff3cd;
-            color: #856404;
+        .alert-overdue {
+            background: #ffebee;
+            color: #d32f2f;
         }
         
-        .status-absent {
-            background: #f8d7da;
-            color: #721c24;
+        /* 一括アクション */
+        .bulk-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
         }
         
-        .status-off {
-            background: #e2e3e5;
-            color: #495057;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        .bulk-btn {
+            padding: 15px 25px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
             font-size: 14px;
             font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #5a67d8;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c82333;
-        }
-        
-        .search-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .search-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        
-        .date-filter {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .chart-container {
-            height: 300px;
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #666;
+            gap: 8px;
         }
         
+        .bulk-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .bulk-btn.primary {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        
+        /* レスポンシブ */
         @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
+            .main-container {
+                padding: 15px;
             }
             
-            .dashboard-grid {
+            .overview-grid {
                 grid-template-columns: 1fr;
             }
             
-            .header-content {
+            .bulk-actions {
+                bottom: 15px;
+                right: 15px;
                 flex-direction: column;
-                gap: 10px;
-            }
-            
-            .table-container {
-                overflow-x: auto;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
+    <header class="dashboard-header">
         <div class="header-content">
-            <div class="logo">RepoTomo 管理画面</div>
-            <div class="user-menu">
-                <span>管理者: 田中 花子</span>
-                <button class="btn btn-secondary">ログアウト</button>
+            <h1 class="header-title">📊 報告書ダッシュボード</h1>
+            <div class="header-info">
+                <span>👥 管理対象: 45名</span>
+                <span>📅 2025年7月15日 14:30</span>
+                <span>🔄 自動更新: ON</span>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <!-- ダッシュボード統計 -->
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">今日の出勤者</div>
-                    <div class="card-icon">👥</div>
-                </div>
-                <div class="stat-number">12</div>
-                <div class="stat-label">/ 15人</div>
+    </header>
+    
+    <div class="main-container">
+        <!-- 優先対応エリア -->
+        <div class="priority-section">
+            <div class="priority-header">
+                <span class="priority-icon">⚡</span>
+                <h2 class="priority-title">対応が必要なもの</h2>
+                <span class="priority-count">3件</span>
             </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">現在勤務中</div>
-                    <div class="card-icon">💼</div>
-                </div>
-                <div class="stat-number">8</div>
-                <div class="stat-label">名</div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">今月の総勤務時間</div>
-                    <div class="card-icon">⏰</div>
-                </div>
-                <div class="stat-number">1,247</div>
-                <div class="stat-label">時間</div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">遅刻・早退</div>
-                    <div class="card-icon">⚠️</div>
-                </div>
-                <div class="stat-number">3</div>
-                <div class="stat-label">件</div>
-            </div>
-        </div>
-
-        <!-- タブナビゲーション -->
-        <div class="nav-tabs">
-            <div class="nav-tab active" onclick="switchTab('realtime')">リアルタイム状況</div>
-            <div class="nav-tab" onclick="switchTab('attendance')">勤怠データ</div>
-            <div class="nav-tab" onclick="switchTab('staff')">スタッフ管理</div>
-            <div class="nav-tab" onclick="switchTab('reports')">レポート</div>
-        </div>
-
-        <!-- リアルタイム状況タブ -->
-        <div id="realtime" class="tab-content active">
-            <div class="search-bar">
-                <input type="text" class="search-input" placeholder="スタッフ名で検索...">
-                <button class="btn btn-primary">検索</button>
-            </div>
-            
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>スタッフ名</th>
-                            <th>現在の状況</th>
-                            <th>出勤時刻</th>
-                            <th>勤務時間</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>田中 太郎</td>
-                            <td><span class="status-badge status-working">勤務中</span></td>
-                            <td>09:00</td>
-                            <td>4時間30分</td>
-                            <td>
-                                <button class="btn btn-secondary">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>佐藤 花子</td>
-                            <td><span class="status-badge status-break">休憩中</span></td>
-                            <td>08:45</td>
-                            <td>4時間45分</td>
-                            <td>
-                                <button class="btn btn-secondary">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>鈴木 一郎</td>
-                            <td><span class="status-badge status-off">退勤済み</span></td>
-                            <td>09:15</td>
-                            <td>8時間00分</td>
-                            <td>
-                                <button class="btn btn-secondary">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>高橋 美咲</td>
-                            <td><span class="status-badge status-absent">欠勤</span></td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>
-                                <button class="btn btn-danger">連絡</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 勤怠データタブ -->
-        <div id="attendance" class="tab-content">
-            <div class="date-filter">
-                <label>期間:</label>
-                <input type="date" class="search-input" style="flex: none; width: 150px;" value="2025-01-01">
-                <span>〜</span>
-                <input type="date" class="search-input" style="flex: none; width: 150px;" value="2025-01-31">
-                <button class="btn btn-primary">フィルター</button>
-                <button class="btn btn-secondary">エクスポート</button>
-            </div>
-            
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>日付</th>
-                            <th>スタッフ名</th>
-                            <th>出勤時刻</th>
-                            <th>退勤時刻</th>
-                            <th>休憩時間</th>
-                            <th>勤務時間</th>
-                            <th>備考</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2025/01/01</td>
-                            <td>田中 太郎</td>
-                            <td>09:00</td>
-                            <td>18:00</td>
-                            <td>1:00</td>
-                            <td>8:00</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>2025/01/01</td>
-                            <td>佐藤 花子</td>
-                            <td>08:45</td>
-                            <td>17:45</td>
-                            <td>1:00</td>
-                            <td>8:00</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>2025/01/01</td>
-                            <td>鈴木 一郎</td>
-                            <td>09:15</td>
-                            <td>18:15</td>
-                            <td>1:00</td>
-                            <td>8:00</td>
-                            <td>遅刻</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- スタッフ管理タブ -->
-        <div id="staff" class="tab-content">
-            <div class="search-bar">
-                <input type="text" class="search-input" placeholder="スタッフ名で検索...">
-                <button class="btn btn-primary">新規追加</button>
-            </div>
-            
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>スタッフID</th>
-                            <th>名前</th>
-                            <th>部署</th>
-                            <th>役職</th>
-                            <th>登録日</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>EMP001</td>
-                            <td>田中 太郎</td>
-                            <td>営業部</td>
-                            <td>主任</td>
-                            <td>2024/04/01</td>
-                            <td>
-                                <button class="btn btn-primary">編集</button>
-                                <button class="btn btn-danger">削除</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>EMP002</td>
-                            <td>佐藤 花子</td>
-                            <td>総務部</td>
-                            <td>係長</td>
-                            <td>2024/04/01</td>
-                            <td>
-                                <button class="btn btn-primary">編集</button>
-                                <button class="btn btn-danger">削除</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- レポートタブ -->
-        <div id="reports" class="tab-content">
-            <div class="dashboard-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">月別勤務時間推移</div>
+            <div class="priority-items">
+                <div class="priority-item">
+                    <div class="priority-info">
+                        <div class="priority-name">田中太郎（渋谷店）</div>
+                        <div class="priority-message">❓ 質問: 「外国人スタッフの週報で、日本語レベルの評価基準がわかりません」</div>
+                        <div class="priority-meta">週報 • 2時間前</div>
                     </div>
-                    <div class="chart-container">
-                        <div>グラフ表示エリア<br>（Chart.jsなどを使用して実装）</div>
+                    <div class="priority-actions">
+                        <button class="action-btn btn-reply" onclick="quickReply('田中太郎')">返信する</button>
+                        <button class="action-btn btn-check">✓ 確認</button>
                     </div>
                 </div>
                 
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">部署別勤務状況</div>
+                <div class="priority-item">
+                    <div class="priority-info">
+                        <div class="priority-name">佐藤花子（新宿店）</div>
+                        <div class="priority-message">💬 相談: 「店舗ビジョンの数値目標が現実的でない気がします」</div>
+                        <div class="priority-meta">店舗ビジョン進捗 • 5時間前</div>
                     </div>
-                    <div class="chart-container">
-                        <div>グラフ表示エリア<br>（Chart.jsなどを使用して実装）</div>
+                    <div class="priority-actions">
+                        <button class="action-btn btn-reply">返信する</button>
+                        <button class="action-btn btn-check">✓ 確認</button>
                     </div>
                 </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">レポート生成</div>
-                </div>
-                <div class="date-filter">
-                    <label>期間:</label>
-                    <input type="date" class="search-input" style="flex: none; width: 150px;">
-                    <span>〜</span>
-                    <input type="date" class="search-input" style="flex: none; width: 150px;">
-                    <select class="search-input" style="flex: none; width: 150px;">
-                        <option>全スタッフ</option>
-                        <option>営業部</option>
-                        <option>総務部</option>
-                    </select>
-                    <button class="btn btn-primary">PDF生成</button>
-                    <button class="btn btn-secondary">Excel生成</button>
+                
+                <div class="priority-item">
+                    <div class="priority-info">
+                        <div class="priority-name">山田次郎（池袋店）</div>
+                        <div class="priority-message">🆘 緊急: 「明日の会議資料に必要なデータがわかりません」</div>
+                        <div class="priority-meta">月次KPT • 30分前</div>
+                    </div>
+                    <div class="priority-actions">
+                        <button class="action-btn btn-reply">返信する</button>
+                        <button class="action-btn btn-check">✓ 確認</button>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- 全体概要 -->
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3 class="overview-title">今週の提出状況</h3>
+                    <span style="font-size: 24px;">📈</span>
+                </div>
+                <div class="overview-stat">78%</div>
+                <div class="overview-subtitle">156/200件 提出済み</div>
+                <div style="margin-top: 10px; font-size: 14px; color: #27ae60;">
+                    ✨ 先週より+5%改善！
+                </div>
+            </div>
+            
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3 class="overview-title">平均レスポンス時間</h3>
+                    <span style="font-size: 24px;">⏱️</span>
+                </div>
+                <div class="overview-stat" style="color: #3498db;">2.5時間</div>
+                <div class="overview-subtitle">質問・相談への返答</div>
+                <div style="margin-top: 10px; font-size: 14px; color: #7f8c8d;">
+                    目標: 3時間以内
+                </div>
+            </div>
+            
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3 class="overview-title">今月の改善</h3>
+                    <span style="font-size: 24px;">🎯</span>
+                </div>
+                <div class="overview-stat" style="color: #e74c3c;">-12件</div>
+                <div class="overview-subtitle">未提出数の減少</div>
+                <div style="margin-top: 10px; font-size: 14px; color: #27ae60;">
+                    着実に改善中！
+                </div>
+            </div>
+        </div>
+        
+        <!-- 報告書別サマリー -->
+        <div class="reports-section">
+            <div class="section-header">
+                <h2 class="section-title">報告書別の状況</h2>
+                <div class="filter-tabs">
+                    <button class="filter-tab active">すべて</button>
+                    <button class="filter-tab">要対応</button>
+                    <button class="filter-tab">順調</button>
+                </div>
+            </div>
+            
+            <div class="report-summary">
+                <div class="report-info">
+                    <div class="report-name">週報</div>
+                    <div class="report-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                        <span class="progress-text">85% (38/45名)</span>
+                    </div>
+                </div>
+                <div class="report-alerts">
+                    <span class="alert-badge alert-questions">質問 2件</span>
+                </div>
+            </div>
+            
+            <div class="report-summary">
+                <div class="report-info">
+                    <div class="report-name">店舗ビジョン進捗</div>
+                    <div class="report-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 71%;"></div>
+                        </div>
+                        <span class="progress-text">71% (32/45名)</span>
+                    </div>
+                </div>
+                <div class="report-alerts">
+                    <span class="alert-badge alert-questions">相談 1件</span>
+                    <span class="alert-badge alert-overdue">期限超過 3件</span>
+                </div>
+            </div>
+            
+            <div class="report-summary">
+                <div class="report-info">
+                    <div class="report-name">外国人スタッフ週報</div>
+                    <div class="report-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%;"></div>
+                        </div>
+                        <span class="progress-text">92% (11/12名)</span>
+                    </div>
+                </div>
+                <div class="report-alerts">
+                    <span style="color: #27ae60; font-size: 14px;">✅ 順調</span>
+                </div>
+            </div>
+            
+            <div class="report-summary">
+                <div class="report-info">
+                    <div class="report-name">月次KPT報告</div>
+                    <div class="report-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%;"></div>
+                        </div>
+                        <span class="progress-text">100% (15/15名)</span>
+                    </div>
+                </div>
+                <div class="report-alerts">
+                    <span style="color: #27ae60; font-size: 14px;">✨ 完璧！</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 一括アクション -->
+        <div class="bulk-actions">
+            <button class="bulk-btn">
+                <span>📧</span>
+                <span>一括リマインド送信</span>
+            </button>
+            <button class="bulk-btn primary">
+                <span>✅</span>
+                <span>問題なし報告を一括確認</span>
+            </button>
+        </div>
     </div>
-
+    
     <script>
-        function switchTab(tabName) {
-            // すべてのタブコンテンツを非表示
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // すべてのタブを非アクティブ
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // 選択されたタブをアクティブ化
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+        // 自動更新のシミュレーション
+        setInterval(() => {
+            const timestamps = document.querySelectorAll('.priority-meta');
+            // 実際は新しいデータを取得して更新
+        }, 30000);
+        
+        function quickReply(name) {
+            const response = prompt(`${name}さんへの返信を入力してください：`);
+            if (response) {
+                alert(`返信を送信しました: "${response}"`);
+                // 実際はAjaxでサーバーに送信
+            }
         }
-
-        // 初期化処理
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('管理者ダッシュボードが読み込まれました');
-            
-            // 定期的にデータを更新（実装時）
-            setInterval(function() {
-                console.log('データ更新中...');
-                // リアルタイム情報の更新処理
-            }, 30000); // 30秒ごと
+        
+        // フィルタータブの切り替え
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // フィルタリング処理
+            });
+        });
+        
+        // 一括確認ボタン
+        document.querySelector('.bulk-btn.primary').addEventListener('click', function() {
+            if (confirm('質問・相談がない報告書42件を一括で「確認済み」にしますか？')) {
+                alert('42件の報告書を確認済みにしました！');
+                // 実際はサーバーに送信
+            }
         });
     </script>
 </body>
