@@ -1,0 +1,73 @@
+# RepoTomo - 機密情報とシステムファイルを除外
+
+# 🔐 機密情報（絶対にアップロードしない）
+*.env
+.env*
+config/secrets.json
+private_keys/
+tokens.txt
+passwords.txt
+
+# 🔑 API関連
+*_ACCESS_TOKEN*
+*_SECRET_KEY*
+*_API_KEY*
+line_channel_access_token.txt
+google_service_account.json
+
+# 📊 Google Apps Script設定
+clasp.json
+.clasp.json
+
+# 💾 一時ファイル
+tmp/
+temp/
+cache/
+*.tmp
+*.log
+*.cache
+
+# 🖥️ システムファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 📁 エディタ設定
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# 📦 依存関係
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🏗️ ビルド成果物
+dist/
+build/
+public/generated/
+
+# 📱 モバイル開発
+*.apk
+*.ipa
+platforms/
+plugins/
+
+# 🧪 テスト関連
+coverage/
+.nyc_output
+test-results/
+screenshots/
+
+# 📈 ログファイル
+logs/
+*.log
+log/
+
+# 💡 重要な注意：
+# - 本物のトークンやパスワードは絶対に含めない
+# - テスト用の値は "YOUR_TOKEN_HERE" などプレースホルダーを使用
+# - 実際の運用時は環境変数や外部設定ファイルを使用

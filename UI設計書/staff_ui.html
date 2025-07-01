@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoTomo - スタッフ勤怠管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, Osaka, 'MS PGothic', arial, helvetica, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .status-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #00C9FF;
+        }
+        
+        .status-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .status-time {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00C9FF;
+            margin-bottom: 5px;
+        }
+        
+        .status-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn-checkin {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+        
+        .btn-checkout {
+            background: linear-gradient(135deg, #4834d4, #686de0);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .menu-section {
+            margin-bottom: 20px;
+        }
+        
+        .menu-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .menu-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .menu-item:hover {
+            background: #f8f9fa;
+            border-color: #00C9FF;
+        }
+        
+        .menu-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        
+        .arrow {
+            color: #ccc;
+        }
+        
+        .today-summary {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1976d2;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .summary-item {
+            text-align: center;
+        }
+        
+        .summary-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .summary-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>RepoTomo</h1>
+            <div class="user-info">
+                <span id="userName">田中 太郎</span>さん
+                <br>
+                <span id="currentDate">2025年1月1日 (水)</span>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 現在のステータス -->
+            <div class="status-card">
+                <div class="status-title">現在のステータス</div>
+                <div class="status-time" id="statusTime">未出勤</div>
+                <div class="status-date" id="statusDetail">出勤時刻を記録してください</div>
+            </div>
+            
+            <!-- 出退勤ボタン -->
+            <div class="action-buttons">
+                <button class="btn btn-checkin" id="checkinBtn" onclick="checkIn()">
+                    📅 出勤
+                </button>
+                <button class="btn btn-checkout" id="checkoutBtn" onclick="checkOut()" disabled>
+                    🏠 退勤
+                </button>
+            </div>
+            
+            <!-- 今日のサマリー -->
+            <div class="today-summary">
+                <div class="summary-title">今日の勤務状況</div>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">出勤時刻</div>
+                        <div class="summary-value" id="todayCheckin">--:--</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">退勤時刻</div>
+                        <div class="summary-value" id="todayCheckout">--:--</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">休憩時間</div>
+                        <div class="summary-value" id="todayBreak">00:00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">勤務時間</div>
+                        <div class="summary-value" id="todayWork">00:00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- メニュー -->
+            <div class="menu-section">
+                <div class="menu-title">メニュー</div>
+                
+                <div class="menu-item" onclick="showAttendanceHistory()">
+                    <div>
+                        <span class="menu-icon">📊</span>
+                        勤怠履歴
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+                
+                <div class="menu-item" onclick="showSchedule()">
+                    <div>
+                        <span class="menu-icon">📅</span>
+                        シフト確認
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+                
+                <div class="menu-item" onclick="showProfile()">
+                    <div>
+                        <span class="menu-icon">👤</span>
+                        プロフィール
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+                
+                <div class="menu-item" onclick="showSettings()">
+                    <div>
+                        <span class="menu-icon">⚙️</span>
+                        設定
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 現在時刻の表示更新
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'short'
+            });
+            document.getElementById('currentDate').textContent = dateStr;
+        }
+
+        // 出勤処理
+        function checkIn() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ja-JP', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // UI更新
+            document.getElementById('statusTime').textContent = '勤務中';
+            document.getElementById('statusDetail').textContent = `${timeStr} に出勤しました`;
+            document.getElementById('todayCheckin').textContent = timeStr;
+            
+            // ボタン状態変更
+            document.getElementById('checkinBtn').disabled = true;
+            document.getElementById('checkoutBtn').disabled = false;
+            
+            // サーバーに送信（実装時）
+            console.log('出勤記録:', timeStr);
+            alert('出勤を記録しました');
+        }
+
+        // 退勤処理
+        function checkOut() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ja-JP', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // UI更新
+            document.getElementById('statusTime').textContent = '退勤済み';
+            document.getElementById('statusDetail').textContent = `${timeStr} に退勤しました`;
+            document.getElementById('todayCheckout').textContent = timeStr;
+            
+            // 勤務時間計算（簡易版）
+            const checkinTime = document.getElementById('todayCheckin').textContent;
+            if (checkinTime !== '--:--') {
+                // 実際は詳細な計算が必要
+                document.getElementById('todayWork').textContent = '8:00';
+            }
+            
+            // ボタン状態変更
+            document.getElementById('checkinBtn').disabled = false;
+            document.getElementById('checkoutBtn').disabled = true;
+            
+            // サーバーに送信（実装時）
+            console.log('退勤記録:', timeStr);
+            alert('退勤を記録しました');
+        }
+
+        // メニュー項目の処理
+        function showAttendanceHistory() {
+            alert('勤怠履歴画面（実装予定）');
+        }
+
+        function showSchedule() {
+            alert('シフト確認画面（実装予定）');
+        }
+
+        function showProfile() {
+            alert('プロフィール画面（実装予定）');
+        }
+
+        function showSettings() {
+            alert('設定画面（実装予定）');
+        }
+
+        // 初期化
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // 1分ごとに更新
+    </script>
+</body>
+</html>

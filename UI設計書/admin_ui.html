@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoTomo - 管理者ダッシュボード</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, Osaka, 'MS PGothic', arial, helvetica, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .card-icon {
+            font-size: 24px;
+            padding: 8px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .nav-tab:hover {
+            background: #f8f9fa;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .table td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-working {
+            background: #e8f5e8;
+            color: #2e7d2e;
+        }
+        
+        .status-break {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-absent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-off {
+            background: #e2e3e5;
+            color: #495057;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .date-filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .chart-container {
+            height: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">RepoTomo 管理画面</div>
+            <div class="user-menu">
+                <span>管理者: 田中 花子</span>
+                <button class="btn btn-secondary">ログアウト</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ダッシュボード統計 -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">今日の出勤者</div>
+                    <div class="card-icon">👥</div>
+                </div>
+                <div class="stat-number">12</div>
+                <div class="stat-label">/ 15人</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">現在勤務中</div>
+                    <div class="card-icon">💼</div>
+                </div>
+                <div class="stat-number">8</div>
+                <div class="stat-label">名</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">今月の総勤務時間</div>
+                    <div class="card-icon">⏰</div>
+                </div>
+                <div class="stat-number">1,247</div>
+                <div class="stat-label">時間</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">遅刻・早退</div>
+                    <div class="card-icon">⚠️</div>
+                </div>
+                <div class="stat-number">3</div>
+                <div class="stat-label">件</div>
+            </div>
+        </div>
+
+        <!-- タブナビゲーション -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('realtime')">リアルタイム状況</div>
+            <div class="nav-tab" onclick="switchTab('attendance')">勤怠データ</div>
+            <div class="nav-tab" onclick="switchTab('staff')">スタッフ管理</div>
+            <div class="nav-tab" onclick="switchTab('reports')">レポート</div>
+        </div>
+
+        <!-- リアルタイム状況タブ -->
+        <div id="realtime" class="tab-content active">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="スタッフ名で検索...">
+                <button class="btn btn-primary">検索</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>スタッフ名</th>
+                            <th>現在の状況</th>
+                            <th>出勤時刻</th>
+                            <th>勤務時間</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>田中 太郎</td>
+                            <td><span class="status-badge status-working">勤務中</span></td>
+                            <td>09:00</td>
+                            <td>4時間30分</td>
+                            <td>
+                                <button class="btn btn-secondary">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>佐藤 花子</td>
+                            <td><span class="status-badge status-break">休憩中</span></td>
+                            <td>08:45</td>
+                            <td>4時間45分</td>
+                            <td>
+                                <button class="btn btn-secondary">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>鈴木 一郎</td>
+                            <td><span class="status-badge status-off">退勤済み</span></td>
+                            <td>09:15</td>
+                            <td>8時間00分</td>
+                            <td>
+                                <button class="btn btn-secondary">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>高橋 美咲</td>
+                            <td><span class="status-badge status-absent">欠勤</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>
+                                <button class="btn btn-danger">連絡</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 勤怠データタブ -->
+        <div id="attendance" class="tab-content">
+            <div class="date-filter">
+                <label>期間:</label>
+                <input type="date" class="search-input" style="flex: none; width: 150px;" value="2025-01-01">
+                <span>〜</span>
+                <input type="date" class="search-input" style="flex: none; width: 150px;" value="2025-01-31">
+                <button class="btn btn-primary">フィルター</button>
+                <button class="btn btn-secondary">エクスポート</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>日付</th>
+                            <th>スタッフ名</th>
+                            <th>出勤時刻</th>
+                            <th>退勤時刻</th>
+                            <th>休憩時間</th>
+                            <th>勤務時間</th>
+                            <th>備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025/01/01</td>
+                            <td>田中 太郎</td>
+                            <td>09:00</td>
+                            <td>18:00</td>
+                            <td>1:00</td>
+                            <td>8:00</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>2025/01/01</td>
+                            <td>佐藤 花子</td>
+                            <td>08:45</td>
+                            <td>17:45</td>
+                            <td>1:00</td>
+                            <td>8:00</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>2025/01/01</td>
+                            <td>鈴木 一郎</td>
+                            <td>09:15</td>
+                            <td>18:15</td>
+                            <td>1:00</td>
+                            <td>8:00</td>
+                            <td>遅刻</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- スタッフ管理タブ -->
+        <div id="staff" class="tab-content">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="スタッフ名で検索...">
+                <button class="btn btn-primary">新規追加</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>スタッフID</th>
+                            <th>名前</th>
+                            <th>部署</th>
+                            <th>役職</th>
+                            <th>登録日</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>EMP001</td>
+                            <td>田中 太郎</td>
+                            <td>営業部</td>
+                            <td>主任</td>
+                            <td>2024/04/01</td>
+                            <td>
+                                <button class="btn btn-primary">編集</button>
+                                <button class="btn btn-danger">削除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>EMP002</td>
+                            <td>佐藤 花子</td>
+                            <td>総務部</td>
+                            <td>係長</td>
+                            <td>2024/04/01</td>
+                            <td>
+                                <button class="btn btn-primary">編集</button>
+                                <button class="btn btn-danger">削除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- レポートタブ -->
+        <div id="reports" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">月別勤務時間推移</div>
+                    </div>
+                    <div class="chart-container">
+                        <div>グラフ表示エリア<br>（Chart.jsなどを使用して実装）</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">部署別勤務状況</div>
+                    </div>
+                    <div class="chart-container">
+                        <div>グラフ表示エリア<br>（Chart.jsなどを使用して実装）</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">レポート生成</div>
+                </div>
+                <div class="date-filter">
+                    <label>期間:</label>
+                    <input type="date" class="search-input" style="flex: none; width: 150px;">
+                    <span>〜</span>
+                    <input type="date" class="search-input" style="flex: none; width: 150px;">
+                    <select class="search-input" style="flex: none; width: 150px;">
+                        <option>全スタッフ</option>
+                        <option>営業部</option>
+                        <option>総務部</option>
+                    </select>
+                    <button class="btn btn-primary">PDF生成</button>
+                    <button class="btn btn-secondary">Excel生成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // すべてのタブコンテンツを非表示
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // すべてのタブを非アクティブ
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 選択されたタブをアクティブ化
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // 初期化処理
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('管理者ダッシュボードが読み込まれました');
+            
+            // 定期的にデータを更新（実装時）
+            setInterval(function() {
+                console.log('データ更新中...');
+                // リアルタイム情報の更新処理
+            }, 30000); // 30秒ごと
+        });
+    </script>
+</body>
+</html>
