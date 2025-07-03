@@ -176,7 +176,7 @@ function getStaffAppHtml(userId) {
     </div>
     
     <script>
-        const staffInfo = ${JSON.stringify(staffInfo)};
+        const staffInfo = ${staffInfo ? JSON.stringify(staffInfo) : 'null'};
         
         window.onload = function() {
             initializeApp();
@@ -235,8 +235,8 @@ function getStaffAppHtml(userId) {
                 '<h3>' + report.name + '</h3>' +
                 '<p>締切: ' + report.deadline + '</p>' +
                 '<div style="display:flex; gap:10px; margin-top:15px;">' +
-                '<button class="btn btn-primary" onclick="submitReport(\'' + report.id + '\')">✅ 提出完了</button>' +
-                '<button class="btn btn-secondary" onclick="askQuestion(\'' + report.id + '\')">💬 相談する</button>' +
+                '<button class="btn btn-primary" onclick="submitReport(\\'' + report.id + '\\')">✅ 提出完了</button>' +
+                '<button class="btn btn-secondary" onclick="askQuestion(\\'' + report.id + '\\')">💬 相談する</button>' +
                 '</div>' +
                 '</div>'
             ).join('');
@@ -471,6 +471,7 @@ function getAdminDashboardHtml() {
     
     <script>
         window.onload = function() {
+            // 管理者画面では認証チェックをスキップして直接データ読み込み
             loadDashboardData();
             setInterval(loadDashboardData, 30000); // 30秒ごとに更新
         };
@@ -498,7 +499,7 @@ function getAdminDashboardHtml() {
                     '<strong>' + q.staffId + '</strong> - ' + q.reportId + '<br>' +
                     '<span style="color:#666;">' + q.question + '</span>' +
                     '</div>' +
-                    '<button class="btn btn-primary" onclick="replyToQuestion(\'' + q.staffId + '\')">返信</button>' +
+                    '<button class="btn btn-primary" onclick="replyToQuestion(' + "'" + q.staffId + "'" + ')">返信</button>' +
                     '</div>'
                 ).join('');
             }
@@ -523,7 +524,7 @@ function getAdminDashboardHtml() {
                     '<td>' + data.submitted + '</td>' +
                     '<td>' + data.pending + '</td>' +
                     '<td>' + rate + '%</td>' +
-                    '<td><button class="btn btn-success" onclick="sendReminder(\'' + reportId + '\')">リマインド</button></td>' +
+                    '<td><button class="btn btn-success" onclick="sendReminder(' + "'" + reportId + "'" + ')">リマインド</button></td>' +
                     '</tr>'
                 );
             }
@@ -563,7 +564,7 @@ function getAdminDashboardHtml() {
             console.error(error);
             alert('データの読み込みに失敗しました');
         }
-    </script>
+    <\/script>
 </body>
 </html>
   `;

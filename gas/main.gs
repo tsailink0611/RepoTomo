@@ -108,10 +108,15 @@ function createJsonOutput(data) {
  * HTML出力作成
  */
 function createHtmlOutput(html) {
+  // WEB_APP_CONFIGが未定義の場合のフォールバック
+  const appTitle = (typeof WEB_APP_CONFIG !== 'undefined' && WEB_APP_CONFIG.TITLE) 
+    ? WEB_APP_CONFIG.TITLE 
+    : 'RepoTomo - 報告書管理システム';
+    
   return HtmlService
     .createHtmlOutput(html)
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setTitle(WEB_APP_CONFIG.TITLE)
+    .setTitle(appTitle)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setFaviconUrl('https://cdn-icons-png.flaticon.com/512/1055/1055687.png');
 }
