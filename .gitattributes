@@ -1,0 +1,22 @@
+# Git Attributes for RepoTomo Migration
+# GASファイルとReactファイルの競合を最小化
+
+# Google Apps Script files
+*.gs binary
+*.gs -diff
+
+# Line ending normalization
+* text=auto
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
