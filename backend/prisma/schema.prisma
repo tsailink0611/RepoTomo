@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String?  @unique
+  lineUserId String?  @unique
+  role       String   @default("STAFF") // STAFF, MANAGER, ADMIN
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  reportSubmissions ReportSubmission[]
+
+  @@map("users")
+}
+
+model Report {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  type        String   // 週報、月報、KPT等
+  frequency   String?  // weekly, monthly, etc
+  dueDate     String?  // 締切日（柔軟な文字列）
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  submissions ReportSubmission[]
+
+  @@map("reports")
+}
+
+model ReportSubmission {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  reportId    Int
+  status      String   // PENDING, COMPLETED, LATE, CONSULTING
+  submittedAt DateTime?
+  content     String?  // 提出内容
+  notes       String?  // 管理者コメント
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reportId, createdAt])
+  @@map("report_submissions")
+}
+
