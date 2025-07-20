@@ -1,0 +1,134 @@
+.complete-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+  padding: 20px;
+}
+
+.complete-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.celebration-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.complete-card h1 {
+  color: #16A34A;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-bottom: 30px;
+}
+
+.message p {
+  margin: 8px 0;
+  color: #4B5563;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.success-animation {
+  margin: 30px 0;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #10B981;
+  color: white;
+  font-size: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.btn {
+  padding: 15px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.primary {
+  background: #10B981;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn.secondary {
+  background: #F3F4F6;
+  color: #4B5563;
+}
+
+.btn.secondary:hover {
+  background: #E5E7EB;
+}
+
+.motivational-quote {
+  margin-top: 30px;
+  padding: 20px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  font-style: italic;
+}
+
+.motivational-quote p {
+  margin: 5px 0;
+  color: #6B7280;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .complete-card {
+    padding: 30px 20px;
+  }
+  
+  .celebration-icon {
+    font-size: 3rem;
+  }
+  
+  .complete-card h1 {
+    font-size: 1.5rem;
+  }
+}

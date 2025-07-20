@@ -1,0 +1,158 @@
+.report-form-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.report-form-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h2 {
+  color: #1E40AF;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: #64748B;
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #334155;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.gentle-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #E5E7EB;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.3s ease;
+  background: #FAFAFA;
+}
+
+.gentle-textarea:focus {
+  outline: none;
+  border-color: #60A5FA;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.gentle-textarea::placeholder {
+  color: #94A3B8;
+  line-height: 1.6;
+}
+
+.textarea-hint {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #64748B;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.submit-btn {
+  flex: 1;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn.primary {
+  background: #3B82F6;
+  color: white;
+}
+
+.submit-btn.primary:hover:not(:disabled) {
+  background: #2563EB;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.submit-btn.primary:disabled {
+  background: #CBD5E1;
+  cursor: not-allowed;
+}
+
+.submit-btn.secondary {
+  background: #F3F4F6;
+  color: #4B5563;
+}
+
+.submit-btn.secondary:hover:not(:disabled) {
+  background: #E5E7EB;
+}
+
+.encouragement-message {
+  margin-top: 30px;
+  padding: 20px;
+  background: #FEF3C7;
+  border-radius: 12px;
+  border-left: 4px solid #F59E0B;
+}
+
+.encouragement-message p {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: #92400E;
+}
+
+.encouragement-message ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #78350F;
+}
+
+.encouragement-message li {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .report-form-container {
+    padding: 10px;
+    padding-top: 20px;
+  }
+  
+  .report-form-card {
+    padding: 20px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+}
