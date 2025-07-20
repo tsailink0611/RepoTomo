@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// スタッフマスタ（GASのスタッフマスタに対応）
+model Staff {
+  id           String   @id @default(cuid())
+  staffId      String   @unique // S001, S002... (GASと同じ形式)
+  name         String
+  lineUserId   String   @unique
+  role         String   @default("スタッフ") // スタッフ, 管理者, etc
+  store        String   @default("未設定")
+  isActive     Boolean  @default(true)
+  registeredAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // リレーション
+  submissions ReportSubmission[]
+  
+  @@map("staffs")
+}
+
+// 報告書マスタ（GASの報告書マスタに対応）
+model ReportTemplate {
+  id           String   @id @default(cuid())
+  reportId     String   @unique // R001, R002... (GASと同じ形式)
+  name         String
+  frequency    String   // daily, weekly, monthly
+  deadlineDay  Int?     // 週次の場合の曜日 (1=月, 7=日)
+  deadlineTime String?  // 締切時間
+  targetRoles  String   @default("all") // 対象役職 (all, スタッフ, 管理者)
+  isActive     Boolean  @default(true)
+  reminderEnabled Boolean @default(true)
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // リレーション
+  submissions ReportSubmission[]
+  
+  @@map("report_templates")
+}
+
+// 提出履歴（GASの提出履歴に対応）
+model ReportSubmission {
+  id           String   @id @default(cuid())
+  submissionId String   @unique // H001, H002... (GASと同じ形式)
+  staffId      String
+  reportId     String
+  submittedDate String  // YYYY/MM/DD形式（GASに合わせる）
+  submittedAt  DateTime @default(now())
+  status       String   @default("完了") // 完了, 質問, 遅延
+  question     String?  // 質問内容
+  comment      String?  // コメント
+  createdAt    DateTime @default(now())
+
+  // リレーション
+  staff        Staff @relation(fields: [staffId], references: [staffId])
+  reportTemplate ReportTemplate @relation(fields: [reportId], references: [reportId])
+  
+  @@map("report_submissions")
+}
+
+// LINEメッセージ履歴（新規追加）
+model LineMessage {
+  id        String   @id @default(cuid())
+  lineUserId String
+  messageType String // text, postback, follow, unfollow
+  content   String?
+  replyToken String?
+  timestamp DateTime @default(now())
+  processed Boolean  @default(false)
+  
+  @@map("line_messages")
+}
+
+// 通知履歴（新規追加）
+model Notification {
+  id        String   @id @default(cuid())
+  staffId   String?
+  type      String   // reminder, announcement, question_reply
+  title     String
+  message   String
+  sentAt    DateTime @default(now())
+  readAt    DateTime?
+  method    String   @default("line") // line, email, push
+  
+  @@map("notifications")
+}
+
+// システム設定（新規追加）
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  category  String   @default("general")
+  updatedAt DateTime @updatedAt
+  
+  @@map("system_configs")
+}
