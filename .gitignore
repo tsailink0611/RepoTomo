@@ -67,6 +67,21 @@ logs/
 *.log
 log/
 
+# ⚛️ React/Node.js 移行用追加設定
+# TypeScript
+*.tsbuildinfo
+.eslintcache
+
+# React specific
+.next/
+out/
+.vercel/
+
+# Database
+*.db
+*.sqlite
+database.url
+
 # 💡 重要な注意：
 # - 本物のトークンやパスワードは絶対に含めない
 # - テスト用の値は "YOUR_TOKEN_HERE" などプレースホルダーを使用
