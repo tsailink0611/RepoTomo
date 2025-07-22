@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './Login.css'
 
 const Login = () => {
@@ -9,8 +9,8 @@ const Login = () => {
   
   const handleLineLogin = () => {
     setIsLoading(true)
-    // LINE Login URL
-    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${lineChannelId}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid`
+    // LINE Login URL (for production)
+    // const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${lineChannelId}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid`
     
     // For now, just redirect to report form for testing
     setTimeout(() => {
@@ -39,10 +39,7 @@ const Login = () => {
           {isLoading ? (
             <span>ログイン中...</span>
           ) : (
-            <>
-              <img src="/line-icon.svg" alt="LINE" />
-              <span>LINEでログイン</span>
-            </>
+            <span>LINEでログイン</span>
           )}
         </button>
 
