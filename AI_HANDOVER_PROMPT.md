@@ -596,23 +596,37 @@ const successMetrics = {
 }
 ```
 
-## 📋 実装優先順位
+## 📋 実装優先順位（2025年7月更新）
 
-### Phase 1: MVP（2週間）
-1. Supabase環境構築
-2. 既存React UIをSupabase統合
-3. 基本的な報告書提出機能
+### ✅ Phase 0: 準備フェーズ（完了済み）
+1. ✅ 型定義ファイル作成（`src/types/database.ts`）
+2. ✅ モックデータ準備（`src/mocks/mockData.ts`）
+3. ✅ 認証フック（モック版）実装（`src/hooks/useAuth.ts`）
+4. ✅ 環境変数管理設定（`.env.development`, `.env.production`）
+
+### ⏳ Phase 1: Supabase基盤（実装待機中）
+**ユーザー作業待ち**
+1. Supabaseプロジェクト作成
+2. 環境変数設定（.env作成）
+
+**AI実装予定**
+3. Supabaseクライアント設定（`lib/supabase.ts`）
+4. useAuth.tsの本番版統合
+5. 既存Login.tsxのSupabase認証統合
+6. PostgreSQLマイグレーション実行
+
+### 📅 Phase 2: コア機能
+1. 報告書テンプレート表示機能
+2. 報告書提出機能（既存ReportForm.tsx活用）
+3. 完了画面（既存Complete.tsx活用）
 4. 管理者ダッシュボード基本機能
 
-### Phase 2: PWA化（1週間）
-1. Service Worker実装
-2. オフライン機能
-3. プッシュ通知
-
-### Phase 3: 高度機能（1週間）
-1. リアルタイム通知
-2. アチーブメントシステム
-3. 詳細分析機能
+### 📅 Phase 3: 高度機能
+1. リアルタイム通知システム（Supabase Realtime）
+2. 月額0円監視ダッシュボード
+3. アチーブメントシステム
+4. PWA機能（Service Worker）
+5. プッシュ通知機能
 
 ## 🛡️ セキュリティ要件
 
